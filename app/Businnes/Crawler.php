@@ -50,27 +50,26 @@ abstract class Crawler
         }else{
             $query .= http_build_query($parametros);
         }
+//        $this->todoHtml=$this->ler();
+//        return;
 
         $curlConfig +=array(
             CURLOPT_URL            => $this->url.$query,
             CURLOPT_POST           => $post,
-            //CURLOPT_HEADER         => true,
             CURLOPT_SSL_VERIFYHOST=> false,
             CURLOPT_SSL_VERIFYPEER=> false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
-//            CURLOPT_CONNECTTIMEOUT=>5,
-//            CURLOPT_TIMEOUT=>5,
         );
         curl_setopt_array($ch, $curlConfig);
         $this->todoHtml = curl_exec($ch);
-//        $curlStatus=curl_getinfo($ch,CURLINFO_HTTP_CODE);
         $curlErro=curl_errno($ch);
         if($curlErro || !$this->todoHtml)
         {
             throw new \Exception('Curl erro:' . curl_error($ch));
         }
         curl_close($ch);
+        //$this->gravar($this->todoHtml);
     }
     protected function onlyBody(){
         /*<(.|\s)+?> regex para todas as tags*/
@@ -100,5 +99,20 @@ abstract class Crawler
             ,'Pagina atual'=>$this->paginaAtual
             ,'Body'=>$this->body
         ];
+    }
+    public function gravar($texto)
+    {
+        $arquivo = 'meu_arquivo_'.$this->paginaAtual.'.txt';
+        $fp = fopen($arquivo, "a+");
+        fwrite($fp, $texto);
+        fclose($fp);
+    }
+    public function ler(){
+        $arquivo = 'meu_arquivo_'.$this->paginaAtual.'.txt';
+        $fp = fopen($arquivo, "r");
+        $conteudo = fread($fp, filesize($arquivo));
+
+        fclose($fp);
+        return $conteudo;
     }
 }

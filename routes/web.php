@@ -14,10 +14,11 @@
 Route::get('/', function () {
     $t = new  \App\Businnes\CrawlerCNPQ();
     $t->catchHtml();
-    dump( $t->getLicitacoes());
+    $licitacoes=$t->getLicitacoes();
     while(!$t->isUltimaPagina()){
        $t->catchProximaPagina();
-        dump( $t->getLicitacoes());
+        $licitacoes=array_merge($licitacoes,$t->getLicitacoes());
     }
+    dump($licitacoes);
     return view('welcome');
 });
