@@ -1,0 +1,36 @@
+version: "3"
+services:
+  php-apache:
+    image: php:7.1-apache
+    container_name: php-apache
+    ports:
+      - "80:80"
+    environment:
+      - COMPOSE_CONVERT_WINDOWS_PATHS=1
+    volumes:
+      - ./:/var/www/html/
+      - D:\arquivos-volumes\php-grafeno\:/usr/local/etc/php/
+      - D:\arquivos-volumes\apache-grafeno\:/etc/apache2/
+    networks:
+      - grafeno
+    depends_on:
+      - "mariaDB"
+  mariaDB:
+    image: mariadb
+    container_name: mariadb
+    restart: always
+    ports:
+      - "3000"
+    environment:
+      - MYSQL_ROOT_PASSWORD=sqldocker2018
+    ports:
+      - 3306:3306
+    networks:
+      - grafeno
+networks: 
+    grafeno:
+        driver: bridge
+        #mkdir /usr/local/etc/php/conf.d/
+        #docker-php-ext-enable pdo_mysql
+        #/etc/init.d/apache2 reload
+
