@@ -11,14 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    $t = new  \App\Businnes\CrawlerCNPQ();
-    $t->catchHtml();
-    $licitacoes=$t->getLicitacoes();
-    while(!$t->isUltimaPagina()){
-       $t->catchProximaPagina();
-        $licitacoes=array_merge($licitacoes,$t->getLicitacoes());
-    }
-    dump($licitacoes);
-    return view('welcome');
-});
+Route::get('/',['as'=>'home','uses'=>'CrawlerController@index']);
+Route::get('pullcnpq','CrawlerController@pullcnpq');

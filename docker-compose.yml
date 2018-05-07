@@ -32,5 +32,6 @@ networks:
         driver: bridge
         #mkdir /usr/local/etc/php/conf.d/
         #docker-php-ext-enable pdo_mysql
+        #a2enmod rewrite
         #/etc/init.d/apache2 reload
 

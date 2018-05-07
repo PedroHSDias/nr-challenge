@@ -11,7 +11,7 @@ namespace App\Businnes;
 
 abstract class Crawler
 {
-    protected $todoHtml;
+    protected $allHTML;
     protected $body;
     protected $url='';
     protected $paginaAtual=1;
@@ -24,13 +24,12 @@ abstract class Crawler
 //        echo $this->url;
 //    }
 
-
-    public abstract function getLicitacoes();
+    public abstract function getGenericBiddings();
 
     /**
      * @return boolean
      */
-    public abstract function isUltimaPagina();
+    public abstract function isLastPage();
 
     /**
      * @param $url
@@ -62,9 +61,9 @@ abstract class Crawler
             CURLOPT_FOLLOWLOCATION => true,
         );
         curl_setopt_array($ch, $curlConfig);
-        $this->todoHtml = curl_exec($ch);
-        $curlErro=curl_errno($ch);
-        if($curlErro || !$this->todoHtml)
+        $this->allHTML = curl_exec($ch);
+        $curlError=curl_errno($ch);
+        if($curlError || !$this->allHTML)
         {
             throw new \Exception('Curl erro:' . curl_error($ch));
         }
@@ -73,7 +72,7 @@ abstract class Crawler
     }
     protected function onlyBody(){
         /*<(.|\s)+?> regex para todas as tags*/
-        $this->body=preg_split('/<(\/body|body.+)+?/',$this->todoHtml)[1];
+        $this->body=preg_split('/<(\/body|body.+)+?/',$this->allHTML)[1];
     }
 
     /**

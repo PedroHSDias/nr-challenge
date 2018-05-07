@@ -9,11 +9,12 @@
 namespace App\Businnes;
 
 
-use PhpParser\Node\Stmt\TryCatch;
+
 
 class CrawlerCNPQ extends Crawler
 {
     protected $url = 'http://www.cnpq.br/web/guest/licitacoes';
+    const ULB_BASE = 'http://www.cnpq.br';
     protected $totalPaginas = null;
     protected static $erro = 0;
 
@@ -21,7 +22,7 @@ class CrawlerCNPQ extends Crawler
     {
         $parametros = [
             //'delta' => '10'//aparentemente o numero de resultado por paginas
-             'p_p_col_count' => '2'
+            'p_p_col_count' => '2'
             , 'p_p_col_id' => 'column-2'
             , 'p_p_col_pos' => '1'
             , 'p_p_id' => 'licitacoescnpqportlet_WAR_licitacoescnpqportlet_INSTANCE_BHfsvMBDwU0V'
@@ -31,27 +32,21 @@ class CrawlerCNPQ extends Crawler
             , 'pagina' => ++$this->paginaAtual
             //, 'registros' => '1490'//total de registros
         ];
-        try {
-            parent::catchHtml($parametros);
-            return true;
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return false;
-        }
+        parent::catchHtml($parametros);
     }
 
-    public function isUltimaPagina()
+    public function isLastPage()
     {
         if (!isset($this->totalPaginas)) {
             $this->findTotalPaginas();
         }
-        return !($this->paginaAtual <= $this->totalPaginas);
+        return !($this->paginaAtual <= 5);//$this->totalPaginas);
     }
 
     protected function findTotalPaginas()
     {
-        $totalDelta = explode('"', explode('"&delta=', $this->todoHtml)[1])[0];
-        $totalRegistros = explode('"', explode('"&registros=', $this->todoHtml)[1])[0];
+        $totalDelta = explode('"', explode('"&delta=', $this->allHTML)[1])[0];
+        $totalRegistros = explode('"', explode('"&registros=', $this->allHTML)[1])[0];
         $this->totalPaginas = $totalRegistros / $totalDelta;
     }
 
@@ -93,7 +88,7 @@ class CrawlerCNPQ extends Crawler
     {
         $aux = $this->lineFilterTitle($linha);
         $dados['descricao'] = $aux[0];
-        if (stripos($dados['descricao'], 'Dispensa de ') !== false || stripos($dados['descricao'],'Leilão') !== false )
+        if (stripos($dados['descricao'], 'Dispensa de ') !== false || stripos($dados['descricao'], 'Leilão') !== false)
             return null;
 
         $aux = $this->lineFilterDrescription($aux[1]);
@@ -154,16 +149,16 @@ class CrawlerCNPQ extends Crawler
 
     protected function lineFilterApends($linha)
     {
-        if(strpos($linha, '<li') <1)
+        if (strpos($linha, '<li') < 1)
             return null;
         $dados = [];
         $aux[1] = $linha;
         do {
             $aux = $this->cleanLine('a href="', '"', $aux[1]);
-            $anexos['link'] = $aux[0];
+            $anexos['link'] = strpos(trim($aux[0]),'http')===0? $aux[0] : CrawlerCNPQ::ULB_BASE.$aux[0];
 
             $aux = $this->cleanLine('<i class="icon icon-file"></i>', '</a></li>', $aux[1]);
-            $anexos['dsc'] = $aux[0];
+            $anexos['desc'] = $aux[0];
 
             $dados[] = $anexos;
             //dump(strpos($aux[1], '</ul><')>0);
@@ -180,8 +175,7 @@ class CrawlerCNPQ extends Crawler
         return [$conteudo, $resto];
     }
 
-
-    public function getLicitacoes()
+    public function getGenericBiddings()
     {
         return array_filter($this->filterHTMLLicitacoes());
     }
