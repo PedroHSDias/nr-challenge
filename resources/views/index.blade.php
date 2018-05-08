@@ -288,7 +288,9 @@
         </div>
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
         </div>
-
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+            <a href="{{route('pullcnpq')}}" class="mdl-layout__tab">Busca tudo CNPQ</a>
+        </div>
     </header>
     <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="overview">
@@ -321,7 +323,7 @@
         </div>
     </main>
 </div>
-<a href="{{route('pullcnpq')}}" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Busca tudo CNPQ</a>
+
 <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
  * Time: 22:04
  */
 
-namespace App\Businnes;
+namespace App\Business;
 
 
 use App\Append;

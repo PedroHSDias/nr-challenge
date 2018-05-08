@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Append;
 use App\Bidding;
-use App\Businnes\BuilderLicitacao;
-use App\Businnes\CrawlerCNPQ;
-use App\Businnes\FileHelper;
+use App\Business\BuilderLicitacao;
+use App\Business\CrawlerCNPQ;
+use App\Business\FileHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CrawlerController extends Controller
@@ -27,7 +28,7 @@ class CrawlerController extends Controller
         $cnpq->catchHtml();
         $modelsBidding[] = BuilderLicitacao::getBiddings('CNPQ', $cnpq->getGenericBiddings());
         while (!$cnpq->isLastPage()) {
-            $cnpq->catchProximaPagina();
+            $cnpq->catchNextPage();
             $modelsBidding [] = BuilderLicitacao::getBiddings('CNPQ', $cnpq->getGenericBiddings());
         }
 
@@ -48,4 +49,5 @@ class CrawlerController extends Controller
             return response()->download(storage_path('app/public/').$append->file_location);
         }
     }
+
 }

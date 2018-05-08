@@ -1,8 +1,8 @@
--- MySQL Workbench Forward Engineeri
-CREATE SCHEMA  db_grafeno DEFAULT CHARACTER SET utf8 ;
+
+CREATE SCHEMA IF NOT EXISTS db_grafeno DEFAULT CHARACTER SET utf8 ;
 USE db_grafeno ;
 
-CREATE TABLE  db_grafeno.tb_biddings (
+CREATE TABLE IF NOT EXISTS db_grafeno.tb_biddings (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(250) NOT NULL,
   origin VARCHAR(150) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE  db_grafeno.tb_biddings (
 )ENGINE = InnoDB;
 
 
-CREATE TABLE db_grafeno.tb_apends (
+CREATE TABLE IF NOT EXISTS db_grafeno.tb_apends (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(150) NULL,
   file_location VARCHAR(150) NULL,

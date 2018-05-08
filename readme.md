@@ -1,40 +1,80 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# nr-challenge
 
-## About Laravel
+##Tools  
+- [MariaDB](https://hub.docker.com/_/mariadb/)
+- [Composer](https://getcomposer.org/)
+- [Laravel 5.3](https://laravel.com/docs/5.3#installing-laravel)
+- [Docker](https://www.docker.com/community-edition#/download) **Used to mount the environment, any server with minimal requirements to run Laravel will be enough**
+    - Docker-Compose
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+##Requeriments
+- PHP cURL Enabled
+- For Laravel
+    - PHP between 5.6.4 & 7.1
+    - OpenSSL PHP Extension
+    - PDO PHP Extension
+    - Mbstring PHP Extension
+    - Tokenizer PHP Extension
+    - XML PHP Extension
+    - Apache mod_rewrite enabled
+- For Docker **Optional**
+    - Win 10 Pro with Hyper-v support enabled or any distro linux compatible
+    
+ 
+##Instalation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Clone this repository in folder root from your server or any folder if use Docker
+```
+git clone https://github.com/
+```
+In the folder where you clone the project, run composer to download the Laravel dependencies
+```
+php composer install
+```
+or with Docker 
+```
+docker run --rm -i   -v /$(PWD):/app  composer install --ignore-platform-reqs --no-scripts
+```
+###Only for docker
+Pull images and mount the container
+```
+docker-compose up -d
+```
+Docker will use [docker-compose]() to mount 
+By default the [image](https://hub.docker.com/_/php/) used to mount the container not have all requirements for laravel, so it's necessary execute the  following steps:
+To see containers id: 
+```
+docker ps
+```
+![alt text]()
+To instal an enable pdo 
+```
+docker exec {idContainer} -it docker-php-ext-install pdo_mysql
+```
+```
+docker exec {idContainer} docker-php-ext-enable pdo_mysql
+```
+To enable apache mod_rewrite
+```
+docker exec {idContainer} a2enmod rewrite
+```
+To load changes
+```
+docker exec {idContainer} /etc/init.d/apache2 reload
+```
+##Database
+Use the script in [create_db.sql]() to create a database
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+Change the DB configuration in [.env]() to use database
 
-## Learning Laravel
+#Now its ready
+Access http://localhost/public/ or configure a v-host to folder public in project
+    
+In first access all in screen its a te name "Raspagem" and a link named "Busca tudo CNPQ"
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+To execute the crawler just click in "Busca tudo CNPQ", when the aplication will visiti all pages in http://www.cnpq.br/web/guest/licitacoes and get some informations from biddings and save in DB. The files refers appends in this biddings will be save in local host, folder [storage/app/public]().
+Because the massive amount of information a (currently have more tan 1400 records)  this process can take some minutes.
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+#The code
+The scripts more important in this project can be found in [business]() folder, they can be easily adapted to cli, persist in database and download appends to server are optional

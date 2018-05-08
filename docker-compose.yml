@@ -5,12 +5,10 @@ services:
     container_name: php-apache
     ports:
       - "80:80"
-    environment:
-      - COMPOSE_CONVERT_WINDOWS_PATHS=1
+    #environment:
+     # - COMPOSE_CONVERT_WINDOWS_PATHS=1
     volumes:
       - ./:/var/www/html/
-      - D:\arquivos-volumes\php-grafeno\:/usr/local/etc/php/
-      - D:\arquivos-volumes\apache-grafeno\:/etc/apache2/
     networks:
       - grafeno
     depends_on:
@@ -30,8 +28,4 @@ services:
 networks: 
     grafeno:
         driver: bridge
-        #mkdir /usr/local/etc/php/conf.d/
-        #docker-php-ext-enable pdo_mysql
-        #a2enmod rewrite
-        #/etc/init.d/apache2 reload
 

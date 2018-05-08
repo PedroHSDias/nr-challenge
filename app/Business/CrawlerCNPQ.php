@@ -6,7 +6,7 @@
  * Time: 00:03
  */
 
-namespace App\Businnes;
+namespace App\Business;
 
 
 
@@ -15,10 +15,10 @@ class CrawlerCNPQ extends Crawler
 {
     protected $url = 'http://www.cnpq.br/web/guest/licitacoes';
     const ULB_BASE = 'http://www.cnpq.br';
-    protected $totalPaginas = null;
+    protected $totalPages = null;
     protected static $erro = 0;
 
-    public function catchProximaPagina()
+    public function catchNextPage()
     {
         $parametros = [
             //'delta' => '10'//aparentemente o numero de resultado por paginas
@@ -29,7 +29,7 @@ class CrawlerCNPQ extends Crawler
             , 'p_p_lifecycle' => '0'
             , 'p_p_mode' => 'view'
             , 'p_p_state' => 'normal'
-            , 'pagina' => ++$this->paginaAtual
+            , 'pagina' => ++$this->currentPage
             //, 'registros' => '1490'//total de registros
         ];
         parent::catchHtml($parametros);
@@ -37,33 +37,33 @@ class CrawlerCNPQ extends Crawler
 
     public function isLastPage()
     {
-        if (!isset($this->totalPaginas)) {
+        if (!isset($this->totalPages)) {
             $this->findTotalPaginas();
         }
-        return !($this->paginaAtual <= $this->totalPaginas);
+        return !($this->currentPage <= $this->totalPages);
     }
 
     protected function findTotalPaginas()
     {
         $totalDelta = explode('"', explode('"&delta=', $this->allHTML)[1])[0];
-        $totalRegistros = explode('"', explode('"&registros=', $this->allHTML)[1])[0];
-        $this->totalPaginas = $totalRegistros / $totalDelta;
+        $totalRecords = explode('"', explode('"&registros=', $this->allHTML)[1])[0];
+        $this->totalPages = $totalRecords / $totalDelta;
     }
 
-    private function filterHTMLLicitacoes()
+    private function filterHTMLBiddings()
     {
         $this->onlyBody();
-        $tabelaHTML = $this->filterHTMLTabela();
-        $linhasTabelaHTML = $this->filterHTMLLinhas($tabelaHTML);
+        $tableHTML = $this->filterHTMLTable();
+        $rowsTableHTML = $this->filterHTMLRows($tableHTML);
 
-        $dados = [];
-        foreach ($linhasTabelaHTML as $linha) {
-            $dados[] = $this->pullData($linha);
+        $data = [];
+        foreach ($rowsTableHTML as $row) {
+            $data[] = $this->pullData($row);
         }
-        return $dados;
+        return $data;
     }
 
-    protected function filterHTMLTabela()
+    protected function filterHTMLTable()
     {
         $table = explode('<tbody class="table-data">', $this->body)[1];
         $table = explode('</tbody>', $table)[0];
@@ -71,7 +71,7 @@ class CrawlerCNPQ extends Crawler
 
     }
 
-    protected function filterHTMLLinhas($table)
+    protected function filterHTMLRows($table)
     {
         $linhas = [];
         /*/<(tr.+)+?>/*/
@@ -102,7 +102,7 @@ class CrawlerCNPQ extends Crawler
 
         $aux = $this->lineFilterLastUpdate($aux[1]);
         $dados['ultimaAtualizacao'] = $aux[0];
-        $dados['anexos'] = $this->lineFilterApends($aux[1]);
+        $dados['anexos'] = $this->lineFilterAppends($aux[1]);
 
         return $dados;
     }
@@ -147,7 +147,7 @@ class CrawlerCNPQ extends Crawler
         return [$conteudo, $resto];
     }
 
-    protected function lineFilterApends($linha)
+    protected function lineFilterAppends($linha)
     {
         if (strpos($linha, '<li') < 1)
             return null;
@@ -181,7 +181,7 @@ class CrawlerCNPQ extends Crawler
 
     public function getGenericBiddings()
     {
-        return array_filter($this->filterHTMLLicitacoes());
+        return array_filter($this->filterHTMLBiddings());
     }
 
 
