@@ -7,7 +7,7 @@ CREATE TABLE  db_grafeno.tb_biddings (
   name VARCHAR(250) NOT NULL,
   origin VARCHAR(150) NOT NULL,
   object TEXT NULL,
-  starting_date VARCHAR(45) NULL,
+  starting_date VARCHAR(75) NULL,
   over_date VARCHAR(45) NULL,
   original_link VARCHAR(500) NULL,
   publiched_in VARCHAR(45) NULL,
@@ -19,8 +19,8 @@ CREATE TABLE  db_grafeno.tb_biddings (
 CREATE TABLE db_grafeno.tb_apends (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(150) NULL,
-  file_location VARCHAR(45) NOT NULL,
-  file_link VARCHAR(250) NOT NULL,
+  file_location VARCHAR(150) NULL,
+  file_link VARCHAR(250) NULL,
   tb_biddings_fk INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (tb_biddings_fk) REFERENCES tb_biddings(id)

@@ -38,6 +38,7 @@ class BuilderLicitacao
         $modelBidding->starting_date=$bidding['data'];
         $modelBidding->publiched_in=$bidding['ultimaAtualizacao'];
         $modelBidding->last_update = date('Y-m-d H:i');
+        if(isset($bidding['anexos']) && count(array_filter($bidding['anexos']))>0)
         foreach ($bidding['anexos'] as $a) {
             $xpto =new Append();
             $xpto->file_link = $a['link'];

@@ -12,4 +12,5 @@
 */
 
 Route::get('/',['as'=>'home','uses'=>'CrawlerController@index']);
-Route::get('pullcnpq','CrawlerController@pullcnpq');
+Route::get('pullcnpq',['as'=>'pullcnpq','uses'=>'CrawlerController@pullcnpq']);
+Route::get('download/{id}',['as'=>'download','uses'=>'CrawlerController@download']);

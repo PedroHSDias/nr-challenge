@@ -41,17 +41,16 @@ abstract class Crawler
     public function catchHtml($parametros=[], $post=false){
 
         $ch = curl_init();
-        $query='?';
+        $query='';
         $curlConfig=[];
 
         if($post) {
             $curlConfig[CURLOPT_POSTFIELDS]=$parametros;
         }else{
-            $query .= http_build_query($parametros);
+            $query .= '?'.http_build_query($parametros);
         }
 //        $this->todoHtml=$this->ler();
 //        return;
-
         $curlConfig +=array(
             CURLOPT_URL            => $this->url.$query,
             CURLOPT_POST           => $post,

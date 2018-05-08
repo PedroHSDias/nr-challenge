@@ -40,7 +40,7 @@ class CrawlerCNPQ extends Crawler
         if (!isset($this->totalPaginas)) {
             $this->findTotalPaginas();
         }
-        return !($this->paginaAtual <= 5);//$this->totalPaginas);
+        return !($this->paginaAtual <= $this->totalPaginas);
     }
 
     protected function findTotalPaginas()
@@ -155,7 +155,11 @@ class CrawlerCNPQ extends Crawler
         $aux[1] = $linha;
         do {
             $aux = $this->cleanLine('a href="', '"', $aux[1]);
-            $anexos['link'] = strpos(trim($aux[0]),'http')===0? $aux[0] : CrawlerCNPQ::ULB_BASE.$aux[0];
+            if(strpos(trim($aux[0]),'http')===0){
+                $anexos['link'] =  $aux[0];
+            }else{
+                $anexos['link'] = strpos(trim($aux[0]),'/')>=0?CrawlerCNPQ::ULB_BASE.'/'.$aux[0]:CrawlerCNPQ::ULB_BASE.$aux[0];
+            }
 
             $aux = $this->cleanLine('<i class="icon icon-file"></i>', '</a></li>', $aux[1]);
             $anexos['desc'] = $aux[0];
