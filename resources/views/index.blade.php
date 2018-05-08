@@ -294,13 +294,13 @@
     </header>
     <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="overview">
-
             @foreach($biddings as $b)
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__supporting-text">
                         <h4>{{$b->origin or null}} - {{$b->name or null}}</h4>
-                        {{$b->starting_date or null}}<br/>
+                        Abertura: {{$b->starting_date or null}}<br/>
+                        <h6>Objetivo:</h6>
                         {{$b->object or null}}
                     </div>
                     <div class="mdl-card__actions">

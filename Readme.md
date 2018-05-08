@@ -36,7 +36,7 @@ or with Docker
 ```
 docker run --rm -i   -v /$(PWD):/app  composer install --ignore-platform-reqs --no-scripts
 ```
-### Only for docker
+### Only to docker
 Pull images and mount the container
 ```
 docker-compose up -d
@@ -50,18 +50,18 @@ docker ps
 ![alt text](https://github.com/PedroHSDias/nr-challenge/blob/master/resources/assets/docker-help-01.PNG)
 To instal an enable pdo 
 ```
-docker exec {idContainer} -it docker-php-ext-install pdo_mysql
+docker exec -it {idContainer} docker-php-ext-install pdo_mysql
 ```
 ```
-docker exec {idContainer} docker-php-ext-enable pdo_mysql
+docker exec -it {idContainer} docker-php-ext-enable pdo_mysql
 ```
 To enable apache mod_rewrite
 ```
-docker exec {idContainer} a2enmod rewrite
+docker exec -it {idContainer} a2enmod rewrite
 ```
 To load changes
 ```
-docker exec {idContainer} /etc/init.d/apache2 reload
+docker exec -it {idContainer} /etc/init.d/apache2 reload
 ```
 ## Database
 Use the script in [create_db.sql](https://github.com/PedroHSDias/nr-challenge/blob/master/create_db.sql) to create a database
@@ -74,7 +74,7 @@ Access http://localhost/public/ or configure a v-host to folder public in projec
 In first access all in screen its a te name "Raspagem" and a link named "Busca tudo CNPQ"
 
 To execute the crawler just click in "Busca tudo CNPQ", when the aplication will visiti all pages in http://www.cnpq.br/web/guest/licitacoes and get some informations from biddings and save in DB. The files refers appends in this biddings will be save in local host, folder [storage/app/public](https://github.com/PedroHSDias/nr-challenge/tree/master/storage/app/public).
-Because the massive amount of information a (currently have more tan 1400 records)  this process can take some minutes.
+Because the massive amount of information a (currently have more tan 1400 records, more than 1tb of appends)  this process can take some minutes.
 
 # The code 
 

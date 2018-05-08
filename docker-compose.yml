@@ -5,8 +5,8 @@ services:
     container_name: php-apache
     ports:
       - "80:80"
-    #environment:
-     # - COMPOSE_CONVERT_WINDOWS_PATHS=1
+    environment:
+      - COMPOSE_CONVERT_WINDOWS_PATHS=1
     volumes:
       - ./:/var/www/html/
     networks:
