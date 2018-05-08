@@ -1,14 +1,14 @@
 
 # nr-challenge
 
-##Tools  
+## Tools  
 - [MariaDB](https://hub.docker.com/_/mariadb/)
 - [Composer](https://getcomposer.org/)
 - [Laravel 5.3](https://laravel.com/docs/5.3#installing-laravel)
 - [Docker](https://www.docker.com/community-edition#/download) **Used to mount the environment, any server with minimal requirements to run Laravel will be enough**
     - Docker-Compose
 
-##Requeriments
+## Requeriments
 - PHP cURL Enabled
 - For Laravel
     - PHP between 5.6.4 & 7.1
@@ -22,7 +22,7 @@
     - Win 10 Pro with Hyper-v support enabled or any distro linux compatible
     
  
-##Instalation
+## Instalation
 
 Clone this repository in folder root from your server or any folder if use Docker
 ```
@@ -36,7 +36,7 @@ or with Docker
 ```
 docker run --rm -i   -v /$(PWD):/app  composer install --ignore-platform-reqs --no-scripts
 ```
-###Only for docker
+### Only for docker
 Pull images and mount the container
 ```
 docker-compose up -d
@@ -63,12 +63,12 @@ To load changes
 ```
 docker exec {idContainer} /etc/init.d/apache2 reload
 ```
-##Database
+## Database
 Use the script in [create_db.sql](https://github.com/PedroHSDias/nr-challenge/blob/master/create_db.sql) to create a database
 
 Change the DB configuration in [.env](https://github.com/PedroHSDias/nr-challenge/blob/master/.env) to use database
 
-#Now its ready
+# Now its ready
 Access http://localhost/public/ or configure a v-host to folder public in project
     
 In first access all in screen its a te name "Raspagem" and a link named "Busca tudo CNPQ"
